@@ -8,6 +8,8 @@ int bluePin = 9;
 int incomingByte = 0; 
 int tempPin = 1;
 float temperatura = 0;
+char response[10];
+int tempByte= -1;
 //uncomment this line if using a Common Anode LED
 //#define COMMON_ANODE
  
@@ -29,24 +31,31 @@ void loop()
 
 
   Serial.println(incomingByte);
-  if(incomingByte==49){
-  setColor(255, 0, 0);  // red
-  
-
+  if(incomingByte==48){
+      setColor(0,0,0);
+      tempByte=0;
+  }else if(incomingByte==49){
+    setColor(255, 0, 0);  // red
+    tempByte=1;
   }else if(incomingByte==50){
-  
-  setColor(0, 255, 255);  // aqua
-
-  }else if(incomingByte==48){
-    setColor(0,0,0);
-  }
+    setColor(0, 255, 255);  // aqua
+    tempByte=2;
+  }else if(incomingByte==51){
       //Calcula la temperatura usando como referencia 5v
-  temperatura = (5.0 * analogRead(tempPin)*100.0)/1023.0;
-  Serial.delay(500);
-  Serial.println (temperatura); //escribe la temperatura en el serial
-  Serial.println();
-  Serial.delay(500);
-  /**/
+    temperatura = (5.0 * analogRead(tempPin)*100.0)/1023.0;
+    delay(500);
+    Serial.println (temperatura); //escribe la temperatura en el serial
+    Serial.println();
+    delay(500);
+    /**/
+  }else if (incomingByte==52){
+    Serial.print(temperatura);
+    Serial.print(",");
+    Serial.print(tempByte);
+    Serial.println();
+    delay(1000);
+  }
+  
 }
  
 void setColor(int red, int green, int blue)
